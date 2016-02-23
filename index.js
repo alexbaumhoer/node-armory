@@ -17,7 +17,7 @@ armory._get = function(path, options, callback) {
   if (!options.region) { throw new Error('region must be provided') }
 
   options.uri = url.format({
-    protocol: 'http:'
+    protocol: 'https:'
   , hostname: options.region + '.battle.net'
   , pathname: path
   , query: options._query
