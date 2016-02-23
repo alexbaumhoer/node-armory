@@ -22,7 +22,7 @@ armory._get = function(path, options, callback) {
 
   options.uri = url.format({
     protocol: 'https:'
-  , hostname: options.region + 'api.battle.net'
+  , hostname: options.region + '.api.battle.net'
   , pathname: path
   , query: options._query
   })
