@@ -1,5 +1,4 @@
 var request = require('request')
-  , crypto = require('crypto')
   , url = require('url')
   , utils = require('./utils')
 
@@ -13,6 +12,11 @@ armory._get = function(path, options, callback) {
 
   path = encodeURI('/wow' + path)
 
+  // Authentication
+  if (this.auth.publicKey) { 
+    options._query.apikey = this.auth.publicKey
+  }
+
   if (options.locale) { options._query.locale = options.locale }
   if (!options.region) { throw new Error('region must be provided') }
 
@@ -22,18 +26,6 @@ armory._get = function(path, options, callback) {
   , pathname: path
   , query: options._query
   })
-
-  // Authentication
-  if (this.auth.privateKey && this.auth.publicKey) {
-    var signature = crypto.createHmac('sha1', this.auth.privateKey)
-      , date = new Date().toUTCString()
-
-    signature.update(['GET', date, path].join('\n') + '\n')
-
-    options.headers['Date'] = date
-    options.headers['Authorization'] = 'BNET ' + this.auth.publicKey + ':' +
-      signature.digest('base64')
-  }
 
   if (callback) {
     var cb = function(err, res, body) {
